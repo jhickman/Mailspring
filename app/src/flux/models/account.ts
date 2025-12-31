@@ -86,6 +86,10 @@ export class Account extends ModelWithMetadata {
     color: Attributes.String({
       modelKey: 'color',
     }),
+
+    showInUnifiedInbox: Attributes.Boolean({
+      modelKey: 'showInUnifiedInbox',
+    }),
   };
 
   public name: string;
@@ -115,6 +119,7 @@ export class Account extends ModelWithMetadata {
   public syncState: string;
   public syncError: MailsyncProcessExit | null;
   public color: string;
+  public showInUnifiedInbox: boolean;
 
   constructor(args) {
     super(args);
@@ -127,6 +132,7 @@ export class Account extends ModelWithMetadata {
       value: '',
     };
     this.color = this.color || '';
+    this.showInUnifiedInbox = this.showInUnifiedInbox !== false; // default to true
   }
 
   toJSON() {

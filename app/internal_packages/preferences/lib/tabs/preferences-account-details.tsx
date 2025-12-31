@@ -346,6 +346,16 @@ class PreferencesAccountDetails extends Component<
             {localized('Reset Account Color')}
           </div>
         </div>
+        <h6>{localized('Unified Inbox')}</h6>
+        <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+          <input
+            type="checkbox"
+            checked={account.showInUnifiedInbox !== false}
+            onChange={e => this._setStateAndSave({ showInUnifiedInbox: e.target.checked })}
+            style={{ marginRight: 8 }}
+          />
+          {localized('Show in unified inbox')}
+        </label>
         <h6>{localized('Account Settings')}</h6>
         <div className="btn" onClick={this._onManageContacts}>
           {localized('Manage Contacts')}

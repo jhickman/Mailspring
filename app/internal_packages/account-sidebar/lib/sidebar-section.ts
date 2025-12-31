@@ -95,12 +95,15 @@ class SidebarSection {
       return this.standardSectionForAccount(accounts[0]);
     }
 
+    // Filter to only accounts that should appear in unified inbox
+    const unifiedAccounts = accounts.filter(acc => acc.showInUnifiedInbox !== false);
+
     const standardNames = ['inbox', 'important', 'sent', ['archive', 'all'], 'spam', 'trash'];
     const items = [];
 
     for (const nameOrNames of standardNames) {
       const names = Array.isArray(nameOrNames) ? nameOrNames : [nameOrNames];
-      const categories = CategoryStore.getCategoriesWithRoles(accounts, ...names);
+      const categories = CategoryStore.getCategoriesWithRoles(unifiedAccounts, ...names);
       if (categories.length === 0) {
         continue;
       }
@@ -124,7 +127,7 @@ class SidebarSection {
       );
     }
 
-    const accountIds = _.pluck(accounts, 'id');
+    const accountIds = _.pluck(unifiedAccounts, 'id');
 
     const starredItem = SidebarItem.forStarred(accountIds, {
       children: accounts.map(acc => SidebarItem.forStarred([acc.id], { name: acc.label })),

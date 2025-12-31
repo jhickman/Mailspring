@@ -47,15 +47,8 @@ jobs:
       - uses: snapcore/action-build@v1
         id: build
 
-      - uses: snapcore/action-publish@v1
-        env:
-          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_STORE_CREDENTIALS }}
-        with:
-          snap: ${{ steps.build.outputs.snap }}
-          release: edge
-
       - name: Sync artifacts to S3 bucket
         run: |
-          aws s3 sync app/dist/ "s3://mailspring-builds/client/$(git rev-parse --short HEAD)/osx" \
+          aws s3 sync app/dist/ "s3://jhickman-mailspring-builds/client/$(git rev-parse --short HEAD)/osx" \
             --acl public-read \
             --exclude "*" --include *.zip

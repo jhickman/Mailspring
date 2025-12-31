@@ -37,24 +37,17 @@ jobs:
         run: npm ci
         working-directory: .
 
-      - name: Setup AWS CLI
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-
       - name: Lint
         run: npm run lint
 
       - name: Build
         run: DEBUG=electron-packager npm run build
 
-      - uses: snapcore/action-build@v1
-        id: build
-
-      - name: Sync Artifacts to S3
-        run: |
-          aws s3 sync app/dist/ "s3://jhickman-mailspring-builds/client/$(git rev-parse --short HEAD)/osx" \
-            --acl public-read \
-            --exclude "*" --include *.deb --include *.rpm
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-packages-${{ github.sha }}
+          path: |
+            app/dist/*.deb
+            app/dist/*.rpm
+          retention-days: 90
